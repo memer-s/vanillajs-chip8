@@ -1,0 +1,245 @@
+:root {
+	color-scheme: dark;
+	--content: #262C34;	
+	--bg: #18181A;
+}
+
+
+
+body {
+	margin: 0;
+	background-color: var(--bg);
+	color: #eee;
+}
+
+.content {
+	background-color: var(--content);
+}
+
+input {
+	border: 1px gray dashed;
+	padding: 5px;
+	border-radius: 5px 5px 0 0;
+	margin-bottom: 6px;
+}
+
+#memory {
+	display: flex;
+	flex-direction: column;
+	font-family: PlexMono;
+	line-height: 0px;
+	padding: 10px;
+	border-radius: 10px;
+	width: fit-content;
+	margin: 0 20px;
+}
+
+#memory div {
+	display: flex;	
+	gap: 4px;
+}
+
+#memory p {
+	display: inline;
+	width: fit-content;
+	font-size: 18px;
+	margin-top: 11px;
+	margin-bottom: 11px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+#pc {
+	font-family: PlexMono;
+	color: #262C34;
+	background-color: #00FFE0;
+	font-style: normal;
+	display: flex;
+	border: #00FFE0 2px solid;
+	border-top: 8px;
+	border-bottom: 4px;
+	border-radius: 4px;
+}
+
+#pc p {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+#change {
+	color: #262C34;
+	background-color: #70FF00;
+	font-style: normal;
+	display: flex;
+	border: #70FF00 2px solid;
+	border-top: 8px;
+	border-bottom: 4px;
+	border-radius: 4px;
+}
+
+#change p {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+#registers {
+	display: flex;
+	flex-direction: column;
+	font-family: PlexMono;
+	line-height: 0px;
+	padding: 10px;
+	border-radius: 10px;
+	width: fit-content;
+	margin: 0 20px;
+}
+
+#registers div {
+	display: flex;
+	gap: 10px;
+}
+
+#registers p {
+	display: inline;
+	width: fit-content;
+	font-size: 18px;
+	margin-top: 11px;
+	margin-bottom: 11px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.registersect {
+	width: fit-content;
+}
+
+.screen {
+	margin-top: 28px;
+	margin-left: 185px;
+}
+
+.registerhead h2 {
+	margin-left: 22px;
+	line-height: 10px;
+	font-size: 26px;
+	font-family: Plex;
+}
+
+.memorysect {
+	width: fit-content;
+}
+
+.memoryhead {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	margin-bottom: 20px;
+}
+
+.memoryhead p {
+	margin-right: 46px;
+	line-height: 0px;
+}
+
+.memoryhead h2 {
+	margin-left: 46px;
+	line-height: 10px;
+	font-size: 26px;
+	font-family: Plex;
+	margin-bottom: 20px;
+}
+
+.dropzone {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 943.2px;
+	height: 150px;	
+}
+
+.data {
+	display: flex;
+}
+
+.oregisterhead {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	margin-bottom: 20px;
+}
+
+.oregisterhead h2 {
+	margin-left: 30px;
+	line-height: 10px;
+	font-size: 26px;
+	font-family: Plex;
+	margin-bottom: 0px;
+}
+
+.oregisters {
+	display: flex;
+	font-family: Plex;
+	line-height: 0px;
+	padding: 10px;
+	border-radius: 10px;
+	width: fit-content;
+	margin: 0 20px;
+}
+
+.oregistersdata p {
+	line-height: initial;
+	margin: 3px 0 3px 40px;
+}
+
+.oregisterslabels p {
+	line-height: initial;
+	margin: 5px 0 6px 0;
+}
+
+.colorbase {
+	font-family: PlexMono;
+	font-style: normal;
+	display: flex;
+	border-top: 8px;
+	border-bottom: 4px;
+	border-radius: 4px;
+}
+
+.empty {
+	color: #fff;
+	background-color: #18181A;
+	border: #18181A 2px solid;
+}
+
+#sp {
+	color: rgb(0, 0, 0);
+	background-color: #FFF500;
+	border: #FFF500 2px solid;
+}
+
+#pcl {
+	color: rgb(0, 0, 0);
+	background-color: #00FFE0;
+	border: #00FFE0 2px solid;
+}
+
+b {
+	cursor: pointer;
+}
+
+#c {
+	border-radius: 10px;
+}
+
+.mono {
+	font-family: PlexMono;
+}
+
+@font-face {
+	font-family: PlexMono;
+	src: url(fonts/IBMPlexMono-Regular.ttf);
+}
+
+@font-face {
+	font-family: Plex;
+	src: url(fonts/IBMPlexSans-Regular.ttf);
+}

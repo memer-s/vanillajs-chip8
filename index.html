@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chip-8 Emulator & Debugger</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<section class="memorysect">
+		<div class="memoryhead">
+			<h2>Memory</h2>
+			<p class="mono" id="location"></p>
+		</div>
+		<div class="content" id="memory">
+			<input id="filedrop" type="file" class="dropzone"><p>Drop a rom here^! or <b onclick="displayMemory();">not</b>. Click <b onclick="dropHandler(event);">Here</b> to load rom.</p></input>
+		</div>
+		<div class="screen">
+			<canvas id="c" width="640" height="320">canvas not supported bruh</canvas>
+		</div>
+	</section>
+	<main class="data">
+		<section class="registersect">
+			<div class="registerhead">
+				<h2>GP Registers</h2>
+			</div>
+			<div class="content" id="registers">
+				<div><p>00</p><p>00</p><p>00</p><p>00</p></div>
+				<div><p>00</p><p>00</p><p>00</p><p>00</p></div>
+				<div><p>00</p><p>00</p><p>00</p><p>00</p></div>
+				<div><p>00</p><p>00</p><p>00</p><p>00</p></div>
+			</div>
+		</section>
+		<section class="oregister">
+			<div class="oregisterhead">
+				<h2>Other register</h2>
+			</div>
+			<div class="content oregisters" id="">
+				<div class="oregisterslabels">
+					<p>Program counter:</p>
+					<p>Stack pointer:</p>
+					<p>Register I:</p>
+					<p>Delay Timer:</p>
+					<p>Sound Timer:</p>
+				</div>
+				<div class="oregistersdata">
+					<p id="pcl" class="colorbase">000</p>
+					<p class="colorbase" id="sp">000</p>
+					<p class="colorbase empty" id="ireg">000</p>
+					<p class="colorbase empty" id="dt">000</p>
+					<p class="colorbase empty" id="st">000</p>
+				</div>
+
+			</div>
+		</section>
+	</main>
+	<section class="controls">
+		<button onclick="executeInstruction()">progress</button>
+		<button onclick="isrunning = !isrunning">toggle speed.</button>
+		<input type="range" min="0" max="1000" id="speed">
+	</section>
+	<script src="main.js"></script>
+</body>
+</html>
