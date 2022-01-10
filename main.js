@@ -1,3 +1,11 @@
+
+// ---------------------------------------------------------------
+// 
+//    Chip-8 Interpreter / Emulator / Virtual machine / whatever.  
+// Author: https://github.com/memer-s 
+// 
+// ---------------------------------------------------------------
+
 let ram = new Uint8Array(4096);
 let screen = new Array();
 let stack = new Array();
@@ -11,6 +19,8 @@ let sp = 0;
 
 let dt = 0
 let st = 0;
+
+let pp = pc;
 
 const fontset = [
    0xf0, 0x90, 0x90, 0x90, 0xf0, // 0
@@ -33,7 +43,7 @@ const fontset = [
 
 
 for(let i = 0; i < 4096; i++) {
-   ram[i] = 0x0;
+   ram[i] = 0x00;
 }
 
 for(let i = 0; i < 80; i++) {
@@ -93,7 +103,22 @@ function readIntoMemory(buffer) {
    }
    displayMemory()
    executeInstruction()
-   
+}
+
+function resetChip8() {
+   for(let i = 0; i < 16; i++) {
+      registers[i] = 0;
+      stack[i] = 0;
+   }
+   for(let i = 0; i < 64; i++) {
+      for(let j = 0; j < 32; j++) {
+         screen[j][i] = false;
+      }
+   }
+   sp = 0;
+   I = 0;
+   pc = 0x200;
+   executeInstruction()
 }
 
 // kek not fixing this
@@ -119,9 +144,9 @@ function ondragoverHandler(e) {
 }
 
 function displayMemory() {
-   const location = Math.floor(pc/256)
+   const location = Math.floor(pp/256)
 
-   getById("location").innerHTML = formatHex(location*256, 3) + " - " + formatHex((location+1)*256-1, 3);
+   getById("location").innerHTML = '<p><b onclick="pp-=255; displayMemory()">< </b>' + formatHex(location*256, 3) + " - " + formatHex((location+1)*256-1, 3) + '<b onclick="pp+=255; displayMemory();"> ></b></p>';
    
    memoryElement.innerText = "";
    
@@ -162,14 +187,14 @@ function displayRegisters() {
          changed[i] = 1;
          console.error(i);
       }
+      console.log([i, registers[i], oldregisters[i], changed[i]])
    }
-   oldregisters = registers;
    for(let i = 0; i < 16; i++) {
       if(i%4==0) {
          lehtml += "<div>";
       }
       if(changed[i] == 1) {
-         lehtml += '<em id="change"><p>' + formatHex(registers[i], 2) + "</p></em>";
+         lehtml += '<em class="change"><p>' + formatHex(registers[i], 2) + "</p></em>";
       }
       else {
          lehtml += "<p>" + formatHex(registers[i], 2) + "</p>";
@@ -226,8 +251,11 @@ function executeInstruction() {
    const y = (ram[pc+1]&0xf0)>>4;
    const n = (ram[pc+1])&0x0f;
 
-   displayMemory()
+   oldregisters = registers;
+   pp = pc;
+
    displayRegisters()
+   displayMemory()
    updateData()
 
    switch((first&0xf0)>>4) {
@@ -441,6 +469,8 @@ function executeInstruction() {
    if(isrunning) {
       setTimeout(executeInstruction, getById("speed").value)
    }
+
+
 }
 
 let isrunning = false;

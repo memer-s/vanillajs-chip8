@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
+	<div class="mainwrapper">
 	<section class="memorysect">
 		<div class="memoryhead">
 			<h2>Memory</h2>
@@ -56,10 +57,12 @@
 		</section>
 	</main>
 	<section class="controls">
-		<button onclick="executeInstruction()">progress</button>
+		<button onclick="executeInstruction()">step</button>
 		<button onclick="isrunning = !isrunning">toggle speed.</button>
+		<button onclick="resetChip8()">reset</button>
 		<input type="range" min="0" max="1000" id="speed">
 	</section>
+	</div>
 	<script src="main.js"></script>
 </body>
 </html>
