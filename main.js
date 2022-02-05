@@ -8,7 +8,7 @@
 
 let ram = new Uint8Array(4096);
 let screen = new Array();
-let stack = new Array();
+let stack = new Array(16, 0);
 let registers = new Array(16, 0);
 let keyboard = new Array(16);
 
@@ -61,6 +61,10 @@ for (let j = 0; j < 32; j++) {
 
 for (let i = 0; i < 16; i++) {
    registers[i] = 0;
+}
+
+for (let i = 0; i < 16; i++) {
+   stack[i] = 0;
 }
 
 function getById(id) {
@@ -212,6 +216,20 @@ function displayRegisters() {
    getById("registers").innerHTML = lehtml;
 }
 
+function displayStack() {
+   let lehtml = "";
+   for (let i = 0; i < 16; i++) {
+      if (i % 4 == 0) {
+         lehtml += "<div>";
+      }
+      lehtml += "<p>" + formatHex(stack[i], 3) + "</p>";
+      if (i % 4 == 3) {
+         lehtml += "</div>";
+      }
+   }
+   getById("stack").innerHTML = lehtml;
+}
+
 function clearDisp() {
    for (let i = 0; i < 32; i++) {
       for (let j = 0; j < 64; j++) {
@@ -260,6 +278,7 @@ function executeInstruction() {
 
    displayRegisters()
    displayMemory()
+   displayStack()
    updateData()
 
    switch ((first & 0xf0) >> 4) {

@@ -86,7 +86,7 @@ input {
 	margin-right: 0;
 }
 
-#registers {
+#registers, #stack {
 	display: flex;
 	flex-direction: column;
 	font-family: PlexMono;
@@ -97,12 +97,12 @@ input {
 	margin: 0 20px;
 }
 
-#registers div {
+#registers div, #stack div {
 	display: flex;
 	gap: 10px;
 }
 
-#registers p {
+#registers p, #stack p {
 	display: inline;
 	width: fit-content;
 	font-size: 18px;
