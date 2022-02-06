@@ -12,15 +12,15 @@ let stack = new Array(16, 0);
 let registers = new Array(16, 0);
 let keyboard = new Array(16);
 
-let I = 0;
-let pc = 0x200;
-let sp = 0;
+let I = 0;        // I register
+let pc = 0x200;   // Program Counter
+let sp = 0;       // Stack Pointer
 
 
-let dt = 0
-let st = 0;
+let dt = 0;       // Delay Timer
+let st = 0;       // Sound Timer
 
-let pp = pc;
+let pp = pc;      // Variable used for determining location in memory
 
 const fontset = [
    0xf0, 0x90, 0x90, 0x90, 0xf0, // 0
@@ -41,6 +41,9 @@ const fontset = [
    0xf0, 0x80, 0xf0, 0x80, 0x80  // F
 ]
 
+
+// ---------------------------------------------------------------
+// Initializing the arrays
 
 for (let i = 0; i < 4096; i++) {
    ram[i] = 0x00;
@@ -67,12 +70,16 @@ for (let i = 0; i < 16; i++) {
    stack[i] = 0;
 }
 
+// ---------------------------------------------------------------
+
+// Shorthand for document.getElementById();
 function getById(id) {
    return document.getElementById(id);
 }
 
-let memoryElement = getById("memory");
+// ---------------------------------------------------------------
 
+// Used to get hex from number and inserting zeros
 function formatHex(hex, nibbles) {
    let hexString = "";
    if (hex != 0 && hex != true) {
@@ -101,7 +108,11 @@ function formatHex(hex, nibbles) {
    return hexString;
 }
 
+// ---------------------------------------------------------------
+
+// reading program into memory
 function readIntoMemory(buffer) {
+
    for (let i = 0; i < buffer.length; i++) {
       ram[i + 0x200] = buffer[i];
    }
@@ -109,6 +120,7 @@ function readIntoMemory(buffer) {
    executeInstruction()
 }
 
+// Reseting registers, stack, screen, pc, sp, I
 function resetChip8() {
    for (let i = 0; i < 16; i++) {
       registers[i] = 0;
@@ -125,6 +137,8 @@ function resetChip8() {
    executeInstruction()
 }
 
+// ---------------------------------------------------------------
+// Loading programs
 
 // Loading roms from file
 function dropHandler(e) {
@@ -147,7 +161,10 @@ function ondragoverHandler(e) {
    e.preventDefault();
 }
 
+// ---------------------------------------------------------------
+// Display 256 bytes of memory
 
+let memoryElement = getById("memory");
 
 function displayMemory() {
    const location = Math.floor(pp / 256)
@@ -183,8 +200,10 @@ function displayMemory() {
    memoryElement.innerHTML = newhtml;
 }
 
+// ---------------------------------------------------------------
+// Display registers, stack, the other registers
 
-
+// Is supposed to be used to see new values, not working rn
 let oldregisters = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 function displayRegisters() {
@@ -230,6 +249,17 @@ function displayStack() {
    getById("stack").innerHTML = lehtml;
 }
 
+function updateData() {
+   getById("pcl").innerHTML = formatHex(pc, 3)
+   getById("sp").innerHTML = formatHex(sp, 3)
+   getById("ireg").innerHTML = formatHex(I, 3)
+   getById("dt").innerHTML = formatHex(dt, 3)
+   getById("st").innerHTML = formatHex(st, 3)
+}
+
+// ---------------------------------------------------------------
+// Display
+
 function clearDisp() {
    for (let i = 0; i < 32; i++) {
       for (let j = 0; j < 64; j++) {
@@ -255,23 +285,17 @@ function drawScreen(size) {
    }
 }
 
-function updateData() {
-   getById("pcl").innerHTML = formatHex(pc, 3)
-   getById("sp").innerHTML = formatHex(sp, 3)
-   getById("ireg").innerHTML = formatHex(I, 3)
-   getById("dt").innerHTML = formatHex(dt, 3)
-   getById("st").innerHTML = formatHex(st, 3)
-}
-
 drawScreen(10)
 
+// ---------------------------------------------------------------
+
 function executeInstruction() {
-   const first = ram[pc];
-   const last = ram[pc + 1];
-   const nnn = ((ram[pc] << 8) + ram[pc + 1]) & 0x0fff;
-   const x = ram[pc] & 0x0f;
-   const y = (ram[pc + 1] & 0xf0) >> 4;
-   const n = (ram[pc + 1]) & 0x0f;
+   const first = ram[pc];                 // first byte of the opcode
+   const last = ram[pc + 1];              // last byte
+   const nnn = ((ram[pc] << 8) + ram[pc + 1]) & 0x0fff; // last three nibbles of opcode
+   const x = ram[pc] & 0x0f;              // second nibble of the opcode
+   const y = (ram[pc + 1] & 0xf0) >> 4;   // third nibble of the opcode
+   const n = (ram[pc + 1]) & 0x0f;        // last nibble
 
    oldregisters = registers;
    pp = pc;
@@ -281,6 +305,7 @@ function executeInstruction() {
    displayStack()
    updateData()
 
+   // Determine what the opcode starts with
    switch ((first & 0xf0) >> 4) {
       case 0x00:
          if (last == 0xee) {pc = stack[sp]; sp--}
@@ -396,6 +421,7 @@ function executeInstruction() {
          break;
 
       case 0x0d:
+         // Display
          for (let i = 0; i < n; i++) {
             for (let j = 0; j < 8; j++) {
                let bit;
@@ -495,12 +521,14 @@ function executeInstruction() {
          break;
    }
 
+   // Check every register to see that the values arent above the 8bit limit.
    for (let i = 0; i < 16; i++) {
       if (registers[i] > 255 || registers[i] < 0) {
          registers[i] = 0
       }
    }
 
+   // Draw the screen every frame
    drawScreen(10)
    if (isrunning) {
       setTimeout(executeInstruction, getById("speed").value)
