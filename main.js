@@ -96,7 +96,7 @@ function formatHex(hex, nibbles) {
       return hexString;
    }
 
-   hexString = hexString + hex.toString(16);
+   hexString += hex.toString(16);
 
    return hexString;
 }
