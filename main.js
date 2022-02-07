@@ -208,8 +208,12 @@ let oldregisters = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 function displayRegisters() {
    let lehtml = "";
+
    let changed = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
    for (let i = 0; i < 16; i++) {
+
+      console.log([registers[i], oldregisters[i]])
       if (registers[i] != oldregisters[i]) {
          changed[i] = 1;
          console.error(i);
@@ -229,8 +233,16 @@ function displayRegisters() {
       if (i % 4 == 3) {
          lehtml += "</div>";
       }
-      // stupido
+
+      oldregisters[i] = registers[i]
    }
+
+   // Thing to think about when writing js,
+   // if i would have typed oldregisters = registers
+   // then oldregisters would only be a reference to registers
+   // Finally figured it out.
+   // VERY IMPORTANT
+
    // console.log(lehtml);
    getById("registers").innerHTML = lehtml;
 }
@@ -297,7 +309,7 @@ function executeInstruction() {
    const y = (ram[pc + 1] & 0xf0) >> 4;   // third nibble of the opcode
    const n = (ram[pc + 1]) & 0x0f;        // last nibble
 
-   oldregisters = registers;
+
    pp = pc;
 
    displayRegisters()
@@ -533,7 +545,6 @@ function executeInstruction() {
    if (isrunning) {
       setTimeout(executeInstruction, getById("speed").value)
    }
-
 }
 
 let isrunning = false;
