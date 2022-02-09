@@ -8,8 +8,8 @@
 
 let ram = new Uint8Array(4096);
 let screen = new Array();
-let stack = new Array(16, 0);
-let registers = new Array(16, 0);
+let stack = new Uint16Array(16, 0);
+let registers = new Uint8Array(16, 0);
 let keyboard = new Array(16);
 
 let I = 0;        // I register
@@ -213,10 +213,10 @@ function displayRegisters() {
 
    for (let i = 0; i < 16; i++) {
 
-      console.log([registers[i], oldregisters[i]])
+      //console.log([registers[i], oldregisters[i]])
       if (registers[i] != oldregisters[i]) {
          changed[i] = 1;
-         console.error(i);
+         //console.error(i);
       }
       // console.log([i, registers[i], oldregisters[i], changed[i]])
    }
@@ -467,6 +467,8 @@ function executeInstruction() {
             }
          }
 
+         // Draw screen only if the draw opcode is called
+         drawScreen(10)
          pc += 2;
          break;
 
@@ -541,7 +543,6 @@ function executeInstruction() {
    }
 
    // Draw the screen every frame
-   drawScreen(10)
    if (isrunning) {
       setTimeout(executeInstruction, getById("speed").value)
    }
