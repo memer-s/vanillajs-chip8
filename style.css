@@ -20,6 +20,10 @@ body {
 	background-color: var(--content);
 }
 
+.highlighted {
+   background-color: #262C34;
+}
+
 input {
 	border: 1px gray dashed;
 	padding: 5px;
@@ -242,6 +246,7 @@ b {
 }
 
 .controls {
+   width: 400px;
 	display: flex;
 	justify-content: space-around;
 	background-color: #262C34;

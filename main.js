@@ -2,11 +2,12 @@
 // ---------------------------------------------------------------
 // 
 //    Chip-8 Interpreter / Emulator / Virtual machine / whatever.  
-// Author: https://github.com/memer-s 
+//
+//       Author: https://github.com/memer-s 
 // 
 // ---------------------------------------------------------------
 
-let ram = new Uint8Array(4096);
+let ram = new Uint8Array(0xfff + 1);
 let screen = new Array();
 let stack = new Uint16Array(16, 0);
 let registers = new Uint8Array(16, 0);
@@ -153,8 +154,10 @@ function dropHandler(e) {
          readIntoMemory(new Uint8Array(arry));
       }
 
-      const buffer = reader.readAsArrayBuffer(file);
+      reader.readAsArrayBuffer(file);
    }
+
+   e.preventDefault();
 }
 
 function ondragoverHandler(e) {
@@ -167,6 +170,14 @@ function ondragoverHandler(e) {
 let memoryElement = getById("memory");
 
 function displayMemory() {
+
+   if (pp > 0xfff) {
+      pp = 0xfff;
+   }
+   if (pp < 0x0) {
+      pp = 0x0;
+   }
+
    const location = Math.floor(pp / 256)
 
    getById("location").innerHTML = '<p><b onclick="pp-=255; displayMemory()">< </b>' + formatHex(location * 256, 3) + " - " + formatHex((location + 1) * 256 - 1, 3) + '<b onclick="pp+=255; displayMemory();"> ></b></p>';
@@ -309,7 +320,6 @@ function executeInstruction() {
    const y = (ram[pc + 1] & 0xf0) >> 4;   // third nibble of the opcode
    const n = (ram[pc + 1]) & 0x0f;        // last nibble
 
-
    pp = pc;
 
    displayRegisters()
@@ -317,7 +327,7 @@ function executeInstruction() {
    displayStack()
    updateData()
 
-   // Determine what the opcode starts with
+   // Determine what nibble the opcode starts with
    switch ((first & 0xf0) >> 4) {
       case 0x00:
          if (last == 0xee) {pc = stack[sp]; sp--}
@@ -335,17 +345,17 @@ function executeInstruction() {
          break;
 
       case 0x03:
-         if (registers[x] == last) {pc += 2;}
+         if (registers[x] === last) {pc += 2;}
          pc += 2;
          break;
 
       case 0x04:
-         if (registers[x] != last) {pc += 2;}
+         if (registers[x] !== last) {pc += 2;}
          pc += 2;
          break;
 
       case 0x05:
-         if (registers[x] == registers[y]) {pc += 2;}
+         if (registers[x] === registers[y]) {pc += 2;}
          pc += 2;
          break;
 
@@ -383,7 +393,8 @@ function executeInstruction() {
                break;
 
             case 0x04:
-               if (registers[x] + registers[y] > 255) {
+               registers[0xf] = false;
+               if (registers[x] + registers[y] > 0xff) {
                   registers[0xf] = true;
                }
                registers[x] += registers[y];
@@ -391,6 +402,10 @@ function executeInstruction() {
                break;
 
             case 0x05:
+               registers[0xf] = false;
+               if (registers[x] - registers[y] > 0xff) {
+                  registers[0xf] = true;
+               }
                registers[x] -= registers[y];
                pc += 2;
                break;
@@ -406,6 +421,7 @@ function executeInstruction() {
                break;
 
             case 0x0e:
+               registers[0xf] = registers[x] >> 7;
                registers[x] <<= 1;
                pc += 2;
                break;
@@ -447,10 +463,10 @@ function executeInstruction() {
                if (xc > 32) {xc -= 32}
                if (yc > 64) {yc -= 64}
                try {
+                  registers[0xf] = false;
                   if (screen[xc][yc] && bit) {
                      screen[xc][yc] = false;
                   }
-
 
                   else if (screen[xc][yc] || bit) {
                      screen[xc][yc] = true;
@@ -533,13 +549,6 @@ function executeInstruction() {
                break;
          }
          break;
-   }
-
-   // Check every register to see that the values arent above the 8bit limit.
-   for (let i = 0; i < 16; i++) {
-      if (registers[i] > 255 || registers[i] < 0) {
-         registers[i] = 0
-      }
    }
 
    // Draw the screen every frame
