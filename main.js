@@ -17,6 +17,8 @@ let I = 0;        // I register
 let pc = 0x200;   // Program Counter
 let sp = 0;       // Stack Pointer
 
+let darkModeEnabled = true;
+toggleDarkmode()
 
 let dt = 0;       // Delay Timer
 let st = 0;       // Sound Timer
@@ -76,6 +78,36 @@ for (let i = 0; i < 16; i++) {
 // Shorthand for document.getElementById();
 function getById(id) {
    return document.getElementById(id);
+}
+
+function toggleDarkmode() {
+   let root = document.documentElement;
+   if(darkModeEnabled) {
+      root.style.setProperty('--content', '#eeeeee')
+      root.style.setProperty('--bg', '#f3f3f3')
+      root.style.setProperty('--text-color', '#363636')
+      root.style.setProperty('color-scheme', 'none')
+      
+      let contentElements = document.getElementsByClassName("content");
+
+      for(let i = 0; i < contentElements.length; i++) {
+         contentElements[i].classList.add("contentd");         
+      }
+      darkModeEnabled = false;
+   } 
+   else {
+      root.style.setProperty('--content', '#262C34')
+      root.style.setProperty('--bg', '#18181A')
+      root.style.setProperty('--text-color', '#fff')
+      root.style.setProperty('color-scheme', 'dark')
+      
+      let contentElements = document.getElementsByClassName("content");
+      
+      for(let i = 0; i < contentElements.length; i++) {
+         contentElements[i].classList.remove("contentd");         
+      }
+      darkModeEnabled = true;
+   }
 }
 
 // ---------------------------------------------------------------

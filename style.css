@@ -2,6 +2,8 @@
 	color-scheme: dark;
 	--content: #262C34;	
 	--bg: #18181A;
+	--text-color: #eee;
+	transition: all 10s ease;
 }
 
 body {
@@ -9,7 +11,18 @@ body {
 	grid-template-columns: 1fr 1000px 1fr;
 	margin: 0;
 	background-color: var(--bg);
-	color: #eee;
+	color: var(--text-color);
+}
+
+.floating {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+}
+
+.floating p {
+	margin: 0;
 }
 
 .mainwrapper {
@@ -18,6 +31,11 @@ body {
 
 .content {
 	background-color: var(--content);
+}
+
+.contentd {
+	border: rgb(228, 228, 228) 1px solid;
+	box-shadow: 3px 3px #00000011;
 }
 
 .highlighted {
@@ -249,7 +267,6 @@ b {
    width: 400px;
 	display: flex;
 	justify-content: space-around;
-	background-color: #262C34;
 	border-radius: 10px;
 	padding: 10px;
 	margin-top: 50px;

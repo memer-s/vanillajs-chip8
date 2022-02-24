@@ -8,6 +8,9 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
+	<div class="floating">
+		<p onclick="toggleDarkmode()">switch color theme.</p>
+	</div>
 	<div class="mainwrapper">
 	<section class="memorysect">
 		<div class="memoryhead">
@@ -67,7 +70,7 @@
          </div>
       </section>
 	</main>
-	<section class="controls">
+	<section class="content controls">
 		<button onclick="executeInstruction()">step</button>
 		<button onclick="isrunning = !isrunning">toggle speed</button>
 		<button onclick="resetChip8()">reset</button>
